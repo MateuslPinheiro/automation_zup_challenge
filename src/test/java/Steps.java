@@ -15,14 +15,15 @@ import java.io.IOException;
 public class Steps {
     private WebDriver driver;
     private String busca;
-    @Dado("^que entro no site da Dominaria$")
-    public void queEntroNoSiteDaDominaria() throws Throwable {
+    private String verificacaoX;
+
+    @Dado("^que entro no site da Dominária$")
+    public void queEntroNoSiteDaDominária() throws Throwable {
         driver = new ChromeDriver();
         driver.get("https://www.dominariacg.com.br/");
         driver.manage().window().maximize();
         //Thread.sleep(3000);
     }
-
 
     @Quando("^faço uma busca por \"([^\"]*)\"$")
     public void façoUmaBuscaPor(String arg1) throws Throwable {
@@ -37,39 +38,108 @@ public class Steps {
         Assert.assertEquals("Busca por: " + busca +" | Dominaria Cards & Games", driver.getTitle());
     }
 
-    @Então("^filtro por produtos com estoque$")
-    public void filtroPorProdutosComEstoque() throws Throwable {
-        driver.findElement(By.name("txt_estoque")).click();
-        driver.findElement(By.name("btFiltrar")).click();
+    @Então("^visualizo a página da carta$")
+    public void visualizoAPáginaDaCarta() throws Throwable {
+        String produto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td[1]/div[2]")).getText();
+        Assert.assertEquals("Imagem meramente ilustrativa.", produto);
     }
 
-
-    @Quando("^seleciono um produto$")
-    public void selecionoUmProduto() throws Throwable {
-        driver.findElement(By.id("img_0")).click();
-//        driver.findElement(By.xpath("//a[title='Island']"));
+    @Então("^visualizo a página inicial$")
+    public void visualizoAPáginaInicial() throws Throwable {
+        String url = driver.getCurrentUrl();
+        Assert.assertEquals("https://www.dominariacg.com.br/", url);
     }
 
-    @Então("^visualizo a página do produto$")
-    public void visualizoAPáginaDoProduto() throws Throwable {
-        Assert.assertNotEquals("Busca por: " + busca +" | Dominaria Cards & Games", driver.getTitle());
+    @Então("^visualizo a mensagem \"([^\"]*)\"$")
+    public void visualizoAMensagem(String arg1) throws Throwable {
+        String alerta = driver.findElement(By.className("alertaErro")).getText();
+        Assert.assertEquals(arg1, alerta );
     }
 
-    @Quando("^aperto em comprar$")
-    public void apertoEmComprar() throws Throwable {
+    @Então("^visualizo a página de busca avançada$")
+    public void visualizoAPáginaDeBuscaAvançada() throws Throwable {
+        String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/b")).getText();
+        Assert.assertEquals("Busca Avançada", texto);
+    }
+
+    @Dado("^que estou em uma página de uma carta com estoque$")
+    public void queEstouEmUmaPáginaDeUmaCartaComEstoque() throws Throwable {
+        driver = new ChromeDriver();
+        driver.get("https://www.dominariacg.com.br/?view=ecom/item&tcg=1&card=62913");
+        driver.manage().window().maximize();
+
+    }
+
+    @Quando("^compro (\\d+) unidades?$")
+    public void comproUnidade(int arg1) throws Throwable {
+        String unidades = String.valueOf(arg1);
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(Keys.BACK_SPACE);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(unidades);
+        Thread.sleep(1000);
         driver.findElement(By.xpath("//input[starts-with(@class,'botaoComprar')]")).click();
     }
 
-    @Quando("^vejo meu carrinho$")
-    public void vejoSeTiveSucesso() throws Throwable {
+    @Quando("^acesso o carrinho$")
+    public void acessoOCarrinho() throws Throwable {
         driver.findElement(By.id("meuCarrinhoShow")).click();
         driver.findElement(By.name("btMeuCarrinho")).click();
     }
-    @Então("^verifico se o item está lá$")
-    public void verificoSeOItemEstáLá() throws Throwable {
+
+    @Então("^visualizo o carrinho com uma carta$")
+    public void visualizoOCarrinhoComUmaCarta() throws Throwable {
         String text = driver.findElement(By.className("brdb")).getText();
         Assert.assertEquals("Produto", text);
     }
+
+
+
+    @Então("^recebo a mensagem \"([^\"]*)\"$")
+    public void receboAMensagem(String arg1) throws Throwable {
+        Alert alerta = driver.switchTo().alert();
+        String texto = alerta.getText();
+        alerta.accept();
+        Assert.assertEquals(arg1, texto);
+    }
+
+
+    @Quando("^compro o dobro de unidades que meu estoque permite$")
+    public void comproODobroDeUnidadesQueMeuEstoquePermite() throws Throwable {
+        Calculo unidades = new Calculo();
+        String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr[2]/td[5]")).getText();
+        unidades.setEstoque(texto);
+        verificacaoX = unidades.getEstoque();
+        unidades.dobrar();
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(Keys.BACK_SPACE);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(unidades.getEstoque());
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//input[starts-with(@class,'botaoComprar')]")).click();
+    }
+
+    @Então("^visualizo que há x unidades$")
+    public void visualizoQueHáXUnidades() throws Throwable {
+        String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr[2]/td[3]")).getText();
+        texto = texto.replaceAll("\\D","");
+        Assert.assertEquals(verificacaoX,texto);
+    }
+
+
+    @Quando("^compro exatamente o número de unidades do meu estoque$")
+    public void comproExatamenteONúmeroDeUnidadesDoMeuEstoque() throws Throwable {
+        Calculo unidades = new Calculo();
+        String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr[2]/td[5]")).getText();
+        unidades.setEstoque(texto);
+        verificacaoX = unidades.getEstoque();
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(Keys.BACK_SPACE);
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//*[@id=\"txt_qty_12938717\"]")).sendKeys(unidades.getEstoque());
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//input[starts-with(@class,'botaoComprar')]")).click();
+    }
+
+
+
 
     @After(order = 1)
     public void screenshot(Scenario cenario) {
