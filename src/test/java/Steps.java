@@ -25,8 +25,8 @@ public class Steps {
         //Thread.sleep(3000);
     }
 
-    @Quando("^faço uma busca por \"([^\"]*)\"$")
-    public void façoUmaBuscaPor(String arg1) throws Throwable {
+    @Quando("^faco uma busca por \"([^\"]*)\"$")
+    public void facoUmaBuscaPor(String arg1) throws Throwable {
         driver.findElement(By.name("busca")).sendKeys(arg1);
         driver.findElement(By.name("busca")).sendKeys(Keys.ENTER);
 //        driver.findElement(By.xpath("//img[@title='Buscar']")).click();
@@ -38,14 +38,14 @@ public class Steps {
         Assert.assertEquals("Busca por: " + busca +" | Dominaria Cards & Games", driver.getTitle());
     }
 
-    @Então("^visualizo a página da carta$")
-    public void visualizoAPáginaDaCarta() throws Throwable {
+    @Então("^visualizo a pagina da carta$")
+    public void visualizoAPaginaDaCarta() throws Throwable {
         String produto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td[1]/div[2]")).getText();
         Assert.assertEquals("Imagem meramente ilustrativa.", produto);
     }
 
-    @Então("^visualizo a página inicial$")
-    public void visualizoAPáginaInicial() throws Throwable {
+    @Então("^visualizo a pagina inicial$")
+    public void visualizoAPaginaInicial() throws Throwable {
         String url = driver.getCurrentUrl();
         Assert.assertEquals("https://www.dominariacg.com.br/", url);
     }
@@ -56,14 +56,14 @@ public class Steps {
         Assert.assertEquals(arg1, alerta );
     }
 
-    @Então("^visualizo a página de busca avançada$")
-    public void visualizoAPáginaDeBuscaAvançada() throws Throwable {
+    @Então("^visualizo a pagina de busca avancada$")
+    public void visualizoAPaginaDeBuscaAvancada() throws Throwable {
         String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/b")).getText();
         Assert.assertEquals("Busca Avançada", texto);
     }
 
-    @Dado("^que estou em uma página de uma carta com estoque$")
-    public void queEstouEmUmaPáginaDeUmaCartaComEstoque() throws Throwable {
+    @Dado("^que estou em uma pagina de uma carta com estoque$")
+    public void queEstouEmUmaPaginaDeUmaCartaComEstoque() throws Throwable {
         driver = new ChromeDriver();
         driver.get("https://www.dominariacg.com.br/?view=ecom/item&tcg=1&card=62913");
         driver.manage().window().maximize();
@@ -117,7 +117,7 @@ public class Steps {
         driver.findElement(By.xpath("//input[starts-with(@class,'botaoComprar')]")).click();
     }
 
-    @Então("^visualizo que há x unidades$")
+    @Então("^visualizo que ha x unidades$")
     public void visualizoQueHáXUnidades() throws Throwable {
         String texto = driver.findElement(By.xpath("/html/body/table/tbody/tr[2]/td/table[3]/tbody/tr/td[2]/table/tbody/tr/td[2]/div[2]/table/tbody/tr[2]/td[3]")).getText();
         texto = texto.replaceAll("\\D","");

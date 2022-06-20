@@ -5,22 +5,22 @@ Funcionalidade: Testar a busca por uma carta
   Contexto:
     Dado que entro no site da Dominária
 
-  Cenário: Busca por um nome existente em várias cartas
-    Quando faço uma busca por "Island"
-    Então visualizo os produtos
+  Cenario: Busca por um nome existente em varias cartas
+    Quando faco uma busca por "Island"
+    Entao visualizo os produtos
 
-  Cenário: Busca por exatamente o nome de uma carta cujo nome não contém em outras cartas
-    Quando faço uma busca por "Autoridade da Regente"
-    Então visualizo a página da carta
+  Cenario: Busca por exatamente o nome de uma carta cujo nome nao contem em outras cartas
+    Quando faco uma busca por "Autoridade da Regente"
+    Entao visualizo a pagina da carta
 
-  Cenário: Busca por nada
-    Quando faço uma busca por ""
-    Então visualizo a página inicial
+  Cenario: Busca por nada
+    Quando faco uma busca por ""
+    Entao visualizo a pagina inicial
 
-  Cenário: Busca por palavras inexistentes
-    Quando faço uma busca por "d#k"
-    Então visualizo a mensagem "Nenhum item encontrado com os filtros utilizados."
+  Cenario: Busca por palavras inexistentes
+    Quando faco uma busca por "d#k"
+    Entao visualizo a mensagem "Nenhum item encontrado com os filtros utilizados."
 
-  Cenário: Busca por espaço
-    Quando faço uma busca por " "
-    Então visualizo a página de busca avançada
+  Cenario: Busca por espaço
+    Quando faco uma busca por " "
+    Entao visualizo a pagina de busca avancada
