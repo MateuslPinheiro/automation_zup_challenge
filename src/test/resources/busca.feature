@@ -6,12 +6,12 @@ Funcionalidade: Testar a busca por uma carta
     Dado que entro no site da Dominária
 
 @fluxoBaseBusca
-  Cenario: Busca por um nome existente em varias cartas
+  Cenario: Busca por um nome comum
     Quando faco uma busca por "Island"
     Entao visualizo os produtos
 
 @fluxoAlternativoBusca
-  Cenario: Busca por exatamente o nome de uma carta cujo nome nao contem em outras cartas
+  Cenario: Busca por um nome especifico
     Quando faco uma busca por "Autoridade da Regente"
     Entao visualizo a pagina da carta
 
