@@ -3,7 +3,7 @@
 Funcionalidade: Testar a busca por uma carta
 
   Contexto:
-    Dado que entro no site da Dominária
+    Dado que entro no site da Dominaria
 
 @fluxoBaseBusca
   Cenario: Busca por um nome comum
